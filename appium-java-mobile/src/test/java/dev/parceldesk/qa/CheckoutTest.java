@@ -48,6 +48,17 @@ public final class CheckoutTest extends DeskFixture {
         desk.expectResult("Items 1 | Total AED 48");
     }
 
+    @Test(groups = {"regression", "checkout"})
+    public void chargeExpressOnceAfterVoucher() {
+        desk.openCheckout();
+        desk.checkout.addNotebook();
+        desk.checkout.applySave10();
+        desk.checkout.selectExpress();
+        desk.expectResult("Items 1 | Total AED 48");
+        desk.checkout.selectExpress();
+        desk.expectResult("Items 1 | Total AED 48");
+    }
+
     @Test(groups = {"regression", "checkout", "smoke"})
     public void confirmOrderAndClearCart() {
         desk.openCheckout();

@@ -39,6 +39,15 @@ Exclude Delivery From Discount
     checkout.Apply Save10
     Result Should Be    Items 1 | Total AED 48
 
+Charge Express Once After Voucher
+    Open Checkout
+    checkout.Add Notebook
+    checkout.Apply Save10
+    checkout.Select Express
+    Result Should Be    Items 1 | Total AED 48
+    checkout.Select Express
+    Result Should Be    Items 1 | Total AED 48
+
 Confirm Order And Clear Cart
     [Tags]    smoke
     Open Checkout

@@ -42,6 +42,8 @@ public abstract class DeskFixture {
                 var file = dir.resolve(result.getMethod().getMethodName() + ".png");
                 Files.write(file, ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES));
             }
+        } catch (java.io.IOException | RuntimeException error) {
+            System.err.println("Screenshot capture failed for " + result.getName() + ": " + error);
         } finally {
             driver.quit();
             driver = null;

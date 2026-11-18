@@ -41,6 +41,15 @@ def test_exclude_delivery_from_discount(desk):
     desk.checkout.apply_save10()
     desk.expect_result("Items 1 | Total AED 48")
 
+def test_charge_express_once_after_voucher(desk):
+    desk.open_checkout()
+    desk.checkout.add_notebook()
+    desk.checkout.apply_save10()
+    desk.checkout.select_express()
+    desk.expect_result("Items 1 | Total AED 48")
+    desk.checkout.select_express()
+    desk.expect_result("Items 1 | Total AED 48")
+
 
 @pytest.mark.smoke
 def test_confirm_order_and_clear_cart(desk):

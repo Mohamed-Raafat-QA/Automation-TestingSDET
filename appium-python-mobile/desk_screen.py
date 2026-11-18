@@ -1,3 +1,4 @@
+from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.support import expected_conditions as conditions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -5,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 class Controls:
     def __init__(self, driver):
-        self.wait = WebDriverWait(driver, 12)
+        self.wait = WebDriverWait(driver, 12, ignored_exceptions=(StaleElementReferenceException,))
 
     def _click(self, element_id):
         self.wait.until(conditions.element_to_be_clickable((AppiumBy.ACCESSIBILITY_ID, element_id))).click()
@@ -49,11 +50,18 @@ class DeskScreen(Controls):
         self.checkout = CheckoutScreen(driver)
 
     def expect_result(self, expected):
-        def matches(driver):
-            elements = driver.find_elements(AppiumBy.ACCESSIBILITY_ID, "result")
-            return bool(elements) and elements[0].text == expected
+        observed = "<element not found>"
 
-        self.wait.until(matches, f"Expected visible result: {expected}")
+        def matches(driver):
+            nonlocal observed
+            elements = driver.find_elements(AppiumBy.ACCESSIBILITY_ID, "result")
+            observed = elements[0].text if elements else "<element not found>"
+            return bool(elements) and observed == expected
+
+        try:
+            self.wait.until(matches)
+        except TimeoutException as error:
+            raise AssertionError(f"Expected {expected!r}, last observed {observed!r}") from error
 
     def open_shipments(self):
         self._click("tracking")

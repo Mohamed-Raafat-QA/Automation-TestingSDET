@@ -3,7 +3,7 @@ Atomation
 
 ## Automation projects
 
-The seven projects implement the same 14 scenarios covering shipment tracking and checkout. Each mobile suite targets native Android and iOS apps. Open a project for setup instructions, smoke tests, and regression commands.
+The seven projects implement the same 15 scenarios covering shipment tracking and checkout. Each mobile suite targets native Android and iOS apps. Open a project for setup instructions, smoke tests, and regression commands.
 
 - [appium-java-mobile](appium-java-mobile/README.md)
 - [appium-python-mobile](appium-python-mobile/README.md)

@@ -14,8 +14,13 @@ public final class DeskPage extends DeskControls {
     }
 
     public void expectResult(String expected) {
-        wait.withMessage("Expected visible result: " + expected)
-            .until(driver -> expected.equals(driver.findElement(By.id("result")).getText()));
+        var observed = new java.util.concurrent.atomic.AtomicReference<>("<element not found>");
+        wait.withMessage(() -> "Expected '" + expected + "', last observed '" + observed.get() + "'")
+            .until(driver -> {
+                var results = driver.findElements(By.id("result"));
+                observed.set(results.isEmpty() ? "<element not found>" : results.get(0).getText());
+                return !results.isEmpty() && expected.equals(observed.get());
+            });
     }
 
     public void openShipments() { click("tracking"); }

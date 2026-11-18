@@ -44,7 +44,7 @@ Start `appium --address 127.0.0.1 --port 4723` in a second terminal on the build
 ### Execute the suite
 
 ```bash
-python -m pytest  # all 14 scenarios
+python -m pytest  # all 15 scenarios
 python -m pytest -m smoke  # three critical paths
 ```
 
@@ -71,6 +71,7 @@ python -m pytest -m smoke  # three critical paths
 | Checkout | Remove last item | regression |
 | Checkout | Apply voucher once | regression |
 | Checkout | Exclude delivery from discount | regression |
+| Checkout | Charge express delivery once after voucher | regression |
 | Checkout | Confirm order and clear cart | regression, smoke |
 | Checkout | Retain basket while tracking | regression |
 | Checkout | Reset voucher and delivery after payment | regression |

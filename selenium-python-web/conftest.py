@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 import pytest
 from desk_page import DeskPage
@@ -30,6 +31,10 @@ def pytest_runtest_makereport(item, call):
     report = outcome.get_result()
     driver = getattr(item, "desk_driver", None)
     if report.failed and driver and report.when in ("setup", "call"):
-        directory = Path("reports/screenshots")
-        directory.mkdir(parents=True, exist_ok=True)
-        driver.save_screenshot(str(directory / f"{item.name}.png"))
+        try:
+            directory = Path("reports/screenshots")
+            directory.mkdir(parents=True, exist_ok=True)
+            if not driver.save_screenshot(str(directory / f"{item.name}.png")):
+                logging.getLogger(__name__).warning("Screenshot was not saved for %s", item.nodeid)
+        except Exception:
+            logging.getLogger(__name__).warning("Screenshot capture failed for %s", item.nodeid, exc_info=True)

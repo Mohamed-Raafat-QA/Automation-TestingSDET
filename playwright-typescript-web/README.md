@@ -15,7 +15,7 @@ npm run typecheck
 ### Execute the suite
 
 ```bash
-npm test  # all 14 scenarios
+npm test  # all 15 scenarios
 npm run smoke  # three critical paths
 ```
 
@@ -44,6 +44,7 @@ For a single engine, run `npm test -- --project=chromium`.
 | Checkout | Remove last item | regression |
 | Checkout | Apply voucher once | regression |
 | Checkout | Exclude delivery from discount | regression |
+| Checkout | Charge express delivery once after voucher | regression |
 | Checkout | Confirm order and clear cart | regression, smoke |
 | Checkout | Retain basket while tracking | regression |
 | Checkout | Reset voucher and delivery after payment | regression |

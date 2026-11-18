@@ -39,6 +39,16 @@ test('exclude delivery from discount', { tag: ["@regression", "@checkout"] }, as
   await desk.expectResult("Items 1 | Total AED 48");
 });
 
+test('charge express once after voucher', { tag: ["@regression", "@checkout"] }, async ({ desk }) => {
+  await desk.openCheckout();
+  await desk.checkout.addNotebook();
+  await desk.checkout.applySave10();
+  await desk.checkout.selectExpress();
+  await desk.expectResult("Items 1 | Total AED 48");
+  await desk.checkout.selectExpress();
+  await desk.expectResult("Items 1 | Total AED 48");
+});
+
 test('confirm order and clear cart', { tag: ["@regression", "@checkout", "@smoke"] }, async ({ desk }) => {
   await desk.openCheckout();
   await desk.checkout.addNotebook();

@@ -11,7 +11,7 @@ Install Chrome. Selenium Manager can resolve the matching driver on the first ru
 ### Execute the suite
 
 ```bash
-mvn -B test  # all 14 scenarios
+mvn -B test  # all 15 scenarios
 mvn -B -Dgroups=smoke test  # three critical paths
 ```
 
@@ -38,6 +38,7 @@ mvn -B -Dgroups=smoke test  # three critical paths
 | Checkout | Remove last item | regression |
 | Checkout | Apply voucher once | regression |
 | Checkout | Exclude delivery from discount | regression |
+| Checkout | Charge express delivery once after voucher | regression |
 | Checkout | Confirm order and clear cart | regression, smoke |
 | Checkout | Retain basket while tracking | regression |
 | Checkout | Reset voucher and delivery after payment | regression |
