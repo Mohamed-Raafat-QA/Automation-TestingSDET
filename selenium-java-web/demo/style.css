@@ -1,0 +1,9 @@
+:root { font: 17px/1.5 system-ui,sans-serif; color: #193941; background: #f0f4f2; }
+main { max-width: 38rem; margin: 5vh auto; padding: clamp(1rem,4vw,3rem); background: white; border-top: 6px solid #246251; }
+header p { color: #47635e; font: bold .78rem monospace; letter-spacing: .12em; }
+h1 { font-size: 2.8rem; margin: .1em 0 .4em; } h2 { font-size: 1.3rem; }
+nav { padding-bottom: 1rem; border-bottom: 1px solid #d1ded7; }
+button { font: inherit; margin: .15rem; padding: .45rem .8rem; border: 1px solid #9cb7ad; border-radius: .3rem; background: #fff; color: inherit; cursor: pointer; }
+nav button[aria-pressed=true], #order { background: #214f44; color: white; }
+button:hover { border-color: #214f44; } button:focus-visible { outline: 3px solid #a95a05; }
+output { display: block; margin-top: 1.4rem; padding: 1rem; background: #eef5f0; }

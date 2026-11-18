@@ -1,0 +1,41 @@
+name: playwright-typescript-web
+'on':
+  push:
+    paths:
+    - playwright-typescript-web/**
+    - .github/workflows/playwright-typescript-web.yml
+  pull_request:
+    paths:
+    - playwright-typescript-web/**
+    - .github/workflows/playwright-typescript-web.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    - name: Install test dependencies
+      run: npm install --no-audit --no-fund
+    - name: Type-check tests
+      run: npm run typecheck
+    - name: Install browser engines
+      run: npx playwright install --with-deps chromium firefox webkit
+    - name: Run all scenarios
+      run: npm test
+    - name: Upload test evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-reports
+        path: playwright-typescript-web/reports/
+        if-no-files-found: warn
+        retention-days: 7
+defaults:
+  run:
+    working-directory: playwright-typescript-web

@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Parcel Desk</title><link rel="stylesheet" href="style.css">
+  <script defer src="desk.js"></script>
+</head><body><main>
+  <header><p>FULFILLMENT OPERATIONS</p><h1>Parcel Desk</h1></header>
+  <nav aria-label="Workspace"><button id="tracking">Shipments</button><button id="checkout">Checkout</button></nav>
+  <section id="shipments"><h2>Track a shipment</h2>
+    <button id="parcel_a">SH-101 · Abu Dhabi</button><button id="parcel_b">SH-202 · Dubai</button>
+    <p><button id="advance">Advance status</button><button id="history">Show history</button></p>
+  </section>
+  <section id="basket" hidden><h2>Notebook checkout</h2><p>AED 40 per notebook · Express delivery AED 12</p>
+    <button id="add">Add notebook</button><button id="remove">Remove notebook</button>
+    <p><button id="voucher">Apply SAVE10</button><button id="express">Express delivery</button></p>
+    <button id="order">Place order</button>
+  </section>
+  <output id="result" aria-live="polite"></output>
+</main></body></html>

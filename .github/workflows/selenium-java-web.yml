@@ -1,0 +1,44 @@
+name: selenium-java-web
+'on':
+  push:
+    paths:
+    - selenium-java-web/**
+    - .github/workflows/selenium-java-web.yml
+  pull_request:
+    paths:
+    - selenium-java-web/**
+    - .github/workflows/selenium-java-web.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+        cache: maven
+        cache-dependency-path: selenium-java-web/pom.xml
+    - uses: browser-actions/setup-chrome@v2
+      with:
+        chrome-version: stable
+        install-chromedriver: true
+    - name: Run all scenarios
+      run: mvn -B test
+    - name: Upload test evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-reports
+        path: |-
+          selenium-java-web/reports/
+          selenium-java-web/target/surefire-reports/
+        if-no-files-found: warn
+        retention-days: 7
+defaults:
+  run:
+    working-directory: selenium-java-web

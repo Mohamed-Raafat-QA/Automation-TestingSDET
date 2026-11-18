@@ -1,0 +1,16 @@
+{
+  "name": "playwright-typescript-web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "playwright test",
+    "smoke": "playwright test --grep @smoke",
+    "report": "playwright show-report reports/html",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "typescript": "5.8.3",
+    "@types/node": "22.15.30"
+  }
+}

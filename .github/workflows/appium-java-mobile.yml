@@ -1,0 +1,113 @@
+name: appium-java-mobile
+'on':
+  push:
+    paths:
+    - appium-java-mobile/**
+    - .github/workflows/appium-java-mobile.yml
+  pull_request:
+    paths:
+    - appium-java-mobile/**
+    - .github/workflows/appium-java-mobile.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      PLATFORM: Android
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+        cache: maven
+        cache-dependency-path: appium-java-mobile/pom.xml
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    - uses: android-actions/setup-android@v3
+    - uses: gradle/actions/setup-gradle@v4
+      with:
+        gradle-version: '8.9'
+    - name: Install Android build tools
+      run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+    - name: Enable emulator acceleration
+      run: |-
+        echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+        sudo udevadm control --reload-rules
+        sudo udevadm trigger --name-match=kvm
+    - name: Build native demo
+      run: |-
+        app_path=$(bash scripts/build-app.sh android)
+        echo "APP_PATH=$app_path" >> "$GITHUB_ENV"
+    - name: Install Appium and platform driver
+      run: |-
+        npm install --global appium@3.1.2
+        appium driver install uiautomator2@5.0.0
+    - uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 35
+        arch: x86_64
+        target: google_apis
+        profile: pixel_6
+        disable-animations: true
+        script: DEVICE_UDID=$(adb devices | awk '$2 == "device" {print $1; exit}') bash scripts/ci-test.sh
+        working-directory: appium-java-mobile
+    - name: Upload test evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: Android-reports
+        path: |-
+          appium-java-mobile/reports/
+          appium-java-mobile/target/surefire-reports/
+        if-no-files-found: warn
+        retention-days: 7
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 55
+    env:
+      PLATFORM: iOS
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: '17'
+        cache: maven
+        cache-dependency-path: appium-java-mobile/pom.xml
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+    - name: Install XcodeGen
+      run: command -v xcodegen || brew install xcodegen
+    - name: Build native demo
+      run: |-
+        app_path=$(bash scripts/build-app.sh ios)
+        echo "APP_PATH=$app_path" >> "$GITHUB_ENV"
+    - name: Install Appium and platform driver
+      run: |-
+        npm install --global appium@3.1.2
+        appium driver install xcuitest@10.7.0
+    - name: Boot iPhone simulator and run suite
+      run: |-
+        export DEVICE_UDID=$(python3 scripts/iphone.py)
+        xcrun simctl boot "$DEVICE_UDID" || xcrun simctl list devices booted | grep -F "$DEVICE_UDID"
+        xcrun simctl bootstatus "$DEVICE_UDID" -b
+        bash scripts/ci-test.sh
+    - name: Upload test evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: iOS-reports
+        path: |-
+          appium-java-mobile/reports/
+          appium-java-mobile/target/surefire-reports/
+        if-no-files-found: warn
+        retention-days: 7
+defaults:
+  run:
+    working-directory: appium-java-mobile

@@ -1,0 +1,43 @@
+name: robot-framework-web
+'on':
+  push:
+    paths:
+    - robot-framework-web/**
+    - .github/workflows/robot-framework-web.yml
+  pull_request:
+    paths:
+    - robot-framework-web/**
+    - .github/workflows/robot-framework-web.yml
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        cache: pip
+        cache-dependency-path: robot-framework-web/requirements.txt
+    - name: Install Python dependencies
+      run: python -m pip install -r requirements.txt
+    - uses: browser-actions/setup-chrome@v2
+      with:
+        chrome-version: stable
+        install-chromedriver: true
+    - name: Run all scenarios
+      run: python -m robot --outputdir reports tests
+    - name: Upload test evidence
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-reports
+        path: robot-framework-web/reports/
+        if-no-files-found: warn
+        retention-days: 7
+defaults:
+  run:
+    working-directory: robot-framework-web
