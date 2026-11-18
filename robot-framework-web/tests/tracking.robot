@@ -7,37 +7,37 @@ Test Tags        regression    tracking
 *** Test Cases ***
 View Booked Shipment
     [Tags]    smoke
-    Select Abu Dhabi
+    tracking.Select Abu Dhabi
     Result Should Be    SH-101 | Booked
 
 View Delivered Shipment
-    Select Dubai
+    tracking.Select Dubai
     Result Should Be    SH-202 | Delivered
 
 Advance Booked Shipment
     [Tags]    smoke
-    Select Abu Dhabi
-    Advance Shipment
+    tracking.Select Abu Dhabi
+    tracking.Advance Shipment
     Result Should Be    SH-101 | In transit
 
 Record Complete Shipment History
-    Select Abu Dhabi
-    Advance Shipment
-    Advance Shipment
-    Show History
+    tracking.Select Abu Dhabi
+    tracking.Advance Shipment
+    tracking.Advance Shipment
+    tracking.Show History
     Result Should Be    SH-101 | Booked > In transit > Delivered
 
 Prevent Duplicate Delivery Event
-    Select Dubai
-    Advance Shipment
+    tracking.Select Dubai
+    tracking.Advance Shipment
     Result Should Be    SH-202 | Already delivered
-    Show History
+    tracking.Show History
     Result Should Be    SH-202 | Booked > In transit > Delivered
 
 Keep Shipments Independent
-    Select Abu Dhabi
-    Advance Shipment
-    Select Dubai
+    tracking.Select Abu Dhabi
+    tracking.Advance Shipment
+    tracking.Select Dubai
     Result Should Be    SH-202 | Delivered
-    Select Abu Dhabi
+    tracking.Select Abu Dhabi
     Result Should Be    SH-101 | In transit
