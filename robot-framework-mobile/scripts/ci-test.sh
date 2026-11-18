@@ -11,4 +11,7 @@ for attempt in {1..60}; do
   sleep 1
 done
 curl --silent --fail http://127.0.0.1:4723/status >/dev/null
+if [[ "$PLATFORM" == "iOS" ]]; then
+  python3 "$GITHUB_WORKSPACE/.github/scripts/prepare-ios.py"
+fi
 python -m robot --outputdir reports tests

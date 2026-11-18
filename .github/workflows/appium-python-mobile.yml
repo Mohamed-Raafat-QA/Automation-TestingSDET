@@ -3,10 +3,12 @@ name: appium-python-mobile
   push:
     paths:
     - appium-python-mobile/**
+    - .github/scripts/prepare-ios.py
     - .github/workflows/appium-python-mobile.yml
   pull_request:
     paths:
     - appium-python-mobile/**
+    - .github/scripts/prepare-ios.py
     - .github/workflows/appium-python-mobile.yml
   workflow_dispatch: {}
 permissions:

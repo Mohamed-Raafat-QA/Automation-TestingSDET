@@ -3,10 +3,12 @@ name: robot-framework-mobile
   push:
     paths:
     - robot-framework-mobile/**
+    - .github/scripts/prepare-ios.py
     - .github/workflows/robot-framework-mobile.yml
   pull_request:
     paths:
     - robot-framework-mobile/**
+    - .github/scripts/prepare-ios.py
     - .github/workflows/robot-framework-mobile.yml
   workflow_dispatch: {}
 permissions:
