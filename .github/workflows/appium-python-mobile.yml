@@ -60,7 +60,7 @@ jobs:
       with:
         api-level: 35
         arch: x86_64
-        target: google_apis
+        target: default
         profile: pixel_6
         disable-animations: true
         script: DEVICE_UDID=$(adb devices | awk '$2 == "device" {print $1; exit}') bash scripts/ci-test.sh
