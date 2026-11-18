@@ -23,14 +23,18 @@ jobs:
         java-version: '17'
         cache: maven
         cache-dependency-path: selenium-java-web/pom.xml
-    - uses: browser-actions/setup-chrome@v2
+    - name: Identify system Chrome
       id: chrome
+      run: |
+        echo "major=$(google-chrome --product-version | cut -d. -f1)" >> "$GITHUB_OUTPUT"
+        echo "binary=$(command -v google-chrome)" >> "$GITHUB_OUTPUT"
+    - uses: browser-actions/setup-chrome@v2
       with:
-        chrome-version: stable
+        chrome-version: ${{ steps.chrome.outputs.major }}
         install-chromedriver: true
     - name: Run all scenarios
       env:
-        CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
+        CHROME_BIN: ${{ steps.chrome.outputs.binary }}
       run: mvn -B test
     - name: Upload test evidence
       if: always()
