@@ -16,6 +16,8 @@ public abstract class DeskFixture {
     @BeforeMethod(alwaysRun = true)
     public void start() throws Exception {
         var options = new ChromeOptions();
+        String binary = System.getenv("CHROME_BIN");
+        if (binary != null && !binary.isBlank()) options.setBinary(binary);
         options.addArguments("--headless=new", "--window-size=1280,900");
         driver = new ChromeDriver(options);
         driver.get(Path.of("demo/index.html").toAbsolutePath().toUri().toString());

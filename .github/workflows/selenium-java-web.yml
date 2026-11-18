@@ -13,7 +13,7 @@ permissions:
   contents: read
 jobs:
   web:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
     - uses: actions/checkout@v4
@@ -24,10 +24,13 @@ jobs:
         cache: maven
         cache-dependency-path: selenium-java-web/pom.xml
     - uses: browser-actions/setup-chrome@v2
+      id: chrome
       with:
         chrome-version: stable
         install-chromedriver: true
     - name: Run all scenarios
+      env:
+        CHROME_BIN: ${{ steps.chrome.outputs.chrome-path }}
       run: mvn -B test
     - name: Upload test evidence
       if: always()
