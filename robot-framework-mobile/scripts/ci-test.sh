@@ -2,7 +2,14 @@
 # CI owns this Appium server. Local development may supply its own server.
 set -euo pipefail
 mkdir -p reports
-appium --address 127.0.0.1 --port 4723 > reports/appium.log 2>&1 &
+server_options=()
+if [[ "$PLATFORM" == "iOS" ]]; then
+  server_options+=(--default-capabilities '{"appium:isHeadless":true,"appium:simulatorStartupTimeout":420000}')
+else
+  adb -s "$DEVICE_UDID" wait-for-device
+  adb -s "$DEVICE_UDID" shell input keyevent 82
+fi
+appium "${server_options[@]}" --address 127.0.0.1 --port 4723 > reports/appium.log 2>&1 &
 server_pid=$!
 trap 'kill "$server_pid" 2>/dev/null || true' EXIT
 for attempt in {1..60}; do
